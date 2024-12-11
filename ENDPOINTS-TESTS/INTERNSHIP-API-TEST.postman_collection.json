@@ -1,0 +1,307 @@
+{
+	"info": {
+		"_postman_id": "05d5abf0-5723-482f-b5b3-59e171a15596",
+		"name": "INTERNSHIP-API-TEST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27481029"
+	},
+	"item": [
+		{
+			"name": "LOGIN INTO KEYCLOAK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"access_token\", jsonData.access_token);",
+							"pm.environment.set(\"access_token\", jsonData.access_token);",
+							"pm.collectionVariables.set(\"refresh_token\", jsonData.refresh_token);",
+							"pm.environment.set(\"refresh_token\", jsonData.refresh_token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{kc_client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{kc_url}}/realms/InternshipUCB/protocol/openid-connect/token",
+					"host": [
+						"{{kc_url}}"
+					],
+					"path": [
+						"realms",
+						"InternshipUCB",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET DATA ESTUDIANTE",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    const jsonData = pm.response.json();",
+							"     pm.expect(jsonData.code).to.eqls(\"200\")",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}api/v1/estudiante/{{kc_uuid_estudiante}}",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"v1",
+						"estudiante",
+						"{{kc_uuid_estudiante}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT DATA ESTUDIANTE",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let randomYear = Math.floor(Math.random() * (2023 - 2000)) + 2000;",
+							"pm.environment.set(\"test-random-year\", randomYear);",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    const jsonData = pm.response.json();",
+							"     pm.expect(jsonData.code).to.eqls(\"200\")",
+							"});",
+							"",
+							"",
+							"pm.test(\"Year has changed\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(parseInt(jsonData.response.anioIngresoUniversidad)).to.eql(parseInt(pm.environment.get(\"test-random-year\")));",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"pm.test(\"Response data length is greater than zero\", function () {",
+							"    const responseData = pm.response.json().response;",
+							"    pm.expect(Object.keys(responseData).length).to.be.greaterThan(0, \"Response data should not be empty\");",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"pm.test(\"Response schema is valid\", function () {",
+							"  var schema = {",
+							"    type: \"object\",",
+							"    properties: {",
+							"      code: { type: \"string\" },",
+							"      response: {",
+							"        type: \"object\",",
+							"        properties: {",
+							"          idPersona: { type: \"number\" },",
+							"          nombre: { type: \"string\" },",
+							"          apellidoPaterno: { type: \"string\" },",
+							"          apellidoMaterno: { type: \"string\" },",
+							"          telefono: { type: \"number\" },",
+							"          ci: { type: \"string\" },",
+							"          fotoPerfil: { type: [\"string\", \"null\"] },",
+							"          bannerPerfil: { type: [\"string\", \"null\"] },",
+							"          anioIngresoUniversidad: { type: \"number\" },",
+							"          descripcion: { type: \"string\" },",
+							"          habilidades: { type: \"string\" },",
+							"          habilidadesSeleccionada: { type: \"string\" },",
+							"          experiencia: { type: \"string\" },",
+							"          fechaDeNacimiento: { type: \"string\" },",
+							"          redesSociales: { type: \"string\" }",
+							"        },",
+							"        required: [\"idPersona\", \"nombre\", \"apellidoPaterno\", \"apellidoMaterno\", \"telefono\", \"ci\", \"anioIngresoUniversidad\", \"descripcion\", \"habilidades\", \"habilidadesSeleccionada\", \"experiencia\", \"fechaDeNacimiento\", \"redesSociales\"]",
+							"      },",
+							"      errorMessage: { type: \"string\" }",
+							"    },",
+							"    required: [\"code\", \"response\", \"errorMessage\"]",
+							"  };",
+							"",
+							"  var response = pm.response.json();",
+							"  pm.expect(tv4.validate(response, schema)).to.be.true;",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Estudiante Test\",\n    \"apellidoPaterno\": \"Automatización\",\n    \"apellidoMaterno\": \"Prueba\",\n    \"telefono\": 978768766,\n    \"ci\": \"6756576\",\n    \"fotoPerfil\": \"http://imgfz.com/i/dMyF894.png\",\n    \"bannerPerfil\": \"http://imgfz.com/i/sgXW19O.png\",\n    \"anioIngresoUniversidad\": {{test-random-year}},\n    \"descripcion\": \"Estudiante de prueba\",\n    \"habilidades\": \"{\\\"habilidades\\\":[{\\\"nivel\\\":3,\\\"habilidad\\\":\\\"Administracion de tiempo\\\",\\\"principal\\\":false},{\\\"nivel\\\":4,\\\"habilidad\\\":\\\"Comunicacion\\\",\\\"principal\\\":false},{\\\"nivel\\\":4,\\\"habilidad\\\":\\\"Adaptabilidad\\\",\\\"principal\\\":false},{\\\"nivel\\\":4,\\\"habilidad\\\":\\\"Resolucion de problemas\\\",\\\"principal\\\":false},{\\\"nivel\\\":5,\\\"habilidad\\\":\\\"Trabajo en equipo\\\",\\\"principal\\\":false},{\\\"nivel\\\":4,\\\"habilidad\\\":\\\"Creatividad\\\",\\\"principal\\\":false},{\\\"nivel\\\":4,\\\"habilidad\\\":\\\"Liderazgo\\\",\\\"principal\\\":false},{\\\"nivel\\\":5,\\\"habilidad\\\":\\\"Habilidades interpersonales\\\",\\\"principal\\\":false},{\\\"nivel\\\":4,\\\"habilidad\\\":\\\"Etica de trabajo\\\",\\\"principal\\\":false},{\\\"nivel\\\":4,\\\"habilidad\\\":\\\"Atencion al detalle\\\",\\\"principal\\\":false},{\\\"nivel\\\":5,\\\"habilidad\\\":\\\"Tecnología\\\",\\\"principal\\\":true}]}\",\n    \"habilidadesSeleccionada\": \"{\\\"habilidades_seleccionadas\\\":\\\"{\\\\\\\"habilidades_seleccionadas\\\\\\\":[\\\\\\\"Tecnología\\\\\\\"]}\\\"}\",\n    \"experiencia\": \"{\\\"experiencia\\\":[]}\",\n    \"fechaDeNacimiento\": \"2002-12-05\",\n    \"redesSociales\": \"{\\\"twitter\\\":{\\\"url\\\":\\\"\\\"},\\\"facebook\\\":{\\\"url\\\":\\\"\\\"},\\\"linkedin\\\":{\\\"url\\\":\\\"\\\"},\\\"instagram\\\":{\\\"url\\\":\\\"\\\"}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}api/v1/estudiante/{{kc_uuid_estudiante}}",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"v1",
+						"estudiante",
+						"{{kc_uuid_estudiante}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST CURRICULUM",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/danielaldazosa/Downloads/PRUEBA-INTERNSHIP/cv.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}api/v1/estudiante/{{kc_uuid_estudiante}}/curriculum",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"v1",
+						"estudiante",
+						"{{kc_uuid_estudiante}}",
+						"curriculum"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET CURRICULUMS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}api/v1/estudiante/{{kc_uuid_estudiante}}/curruculum",
+					"host": [
+						"{{url}}api"
+					],
+					"path": [
+						"v1",
+						"estudiante",
+						"{{kc_uuid_estudiante}}",
+						"curruculum"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "access_token",
+			"value": ""
+		},
+		{
+			"key": "refresh_token",
+			"value": ""
+		}
+	]
+}
