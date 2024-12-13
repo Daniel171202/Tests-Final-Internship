@@ -11,7 +11,7 @@ export class EditProfilePage{
     readonly navbar: NavbarComponent;
 
     readonly numeroCelularInput: Locator;
-    readonly carreraInput: Locator;
+    readonly carreraSelect: Locator;
     readonly anioIngresoInput: Locator;
     readonly descripcionInput: Locator;
 
@@ -27,9 +27,9 @@ export class EditProfilePage{
         this.page = page;
         this.navbar = new NavbarComponent(page);
         this.numeroCelularInput = this.page.getByPlaceholder('Número Celular');
-        this.carreraInput = this.page.getByPlaceholder('Carrera');
+        this.carreraSelect = this.page.getByRole('combobox');
         this.anioIngresoInput = this.page.getByPlaceholder('Año de Ingreso a la Universidad');
-        this.descripcionInput = this.page.getByPlaceholder('Descripción');
+        this.descripcionInput = this.page.getByPlaceholder('Descripción :');
 
         this.guardarButton = this.page.locator('button:has-text("Guardar")');
     }
@@ -46,15 +46,17 @@ export class EditProfilePage{
     }
 
     async fillCarrera(carrera: string){
-        await this.carreraInput.fill(carrera);
+        await this.carreraSelect.selectOption({label: carrera});
     }
 
 
     async fillAnioIngreso(anioIngreso: string){
+        await this.anioIngresoInput.click();
         await this.anioIngresoInput.fill(anioIngreso);
     }
 
     async fillDescripcion(descripcion: string){
+        await this.descripcionInput.click();
         await this.descripcionInput.fill(descripcion);
     }
 
