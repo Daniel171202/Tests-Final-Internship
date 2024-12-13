@@ -4,6 +4,7 @@ import { NavbarComponent } from './components/navbarComponent';
 import { EditProfilePage } from './editProfilePage';
 
 export class ViewProfilePage{
+   
     readonly url = 'https://internship.serverbb.online/perfil/estudiante';
     readonly page: Page;
 
@@ -26,6 +27,12 @@ export class ViewProfilePage{
 
 
 
+    async getNumeroCelular(){
+        const numeroCelular = await this.page.locator('text=+591 12345678').first();
+        return numeroCelular;
+    }
+
+
     async goToEditProfile(){
 
         await this.editProfileButton.click();
@@ -35,6 +42,8 @@ export class ViewProfilePage{
     async convertToEditProfilePage(){
         return new EditProfilePage(this.page);
     }
+
+
 
     
 

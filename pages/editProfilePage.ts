@@ -1,8 +1,10 @@
 import { expect, Locator, Page } from '@playwright/test';
 
 import { NavbarComponent } from './components/navbarComponent';
+import { ViewProfilePage } from './viewProfilePage';
 
 export class EditProfilePage{
+   
     readonly url = 'https://internship.serverbb.online/perfil/estudiante/editar';
     readonly page: Page;
 
@@ -24,7 +26,7 @@ export class EditProfilePage{
     constructor(page: Page){
         this.page = page;
         this.navbar = new NavbarComponent(page);
-        this.numeroCelularInput = this.page.getByPlaceholder('Número de Celular');
+        this.numeroCelularInput = this.page.getByPlaceholder('Número Celular');
         this.carreraInput = this.page.getByPlaceholder('Carrera');
         this.anioIngresoInput = this.page.getByPlaceholder('Año de Ingreso a la Universidad');
         this.descripcionInput = this.page.getByPlaceholder('Descripción');
@@ -37,7 +39,10 @@ export class EditProfilePage{
     }
 
     async fillNumeroCelular(numeroCelular: string){
+        await this.numeroCelularInput.click();
+        await this.numeroCelularInput.fill("");
         await this.numeroCelularInput.fill(numeroCelular);
+
     }
 
     async fillCarrera(carrera: string){
@@ -58,6 +63,19 @@ export class EditProfilePage{
         await this.guardarButton.click();
     }
 
+
+
+    async goToViewProfile(){
+        await this.page.goto('https://internship.serverbb.online/perfil/estudiante');
+        return this.convertToViewProfilePage();
+    }
+
+    async convertToViewProfilePage(){
+        return new ViewProfilePage(this.page);
+    }
+
+
+    
 
 
 
