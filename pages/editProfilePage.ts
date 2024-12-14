@@ -31,7 +31,7 @@ export class EditProfilePage{
         this.anioIngresoInput = this.page.getByPlaceholder('Año de Ingreso a la Universidad');
         this.descripcionInput = this.page.getByPlaceholder('Descripción :');
 
-        this.guardarButton = this.page.locator('button:has-text("Guardar")');
+        this.guardarButton = this.page.getByRole('button', { name: 'Guardar' });
     }
 
     async goto(){
@@ -63,6 +63,8 @@ export class EditProfilePage{
 
     async clickGuardar(){
         await this.guardarButton.click();
+        await this.page.waitForLoadState("networkidle");
+
     }
 
 

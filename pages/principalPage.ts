@@ -31,7 +31,8 @@ export class PrincipalPage{
 
 
     async goToViewProfile(){
-        await this.navbar.clickUserProfile();
+        //await this.navbar.clickUserProfile();
+        await this.page.goto('https://internship.serverbb.online/perfil/estudiante');
         return this.convertToViewProfilePage();
     }
 

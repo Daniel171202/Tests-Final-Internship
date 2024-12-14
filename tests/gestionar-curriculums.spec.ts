@@ -34,10 +34,10 @@ async function login(page: any){
     expect(await viewProfilePage.getCurriculum(cvName)).toBe(cvName);
 
     //delete the cv
-    //await viewProfilePage.deleteCurriculum(cvName);
+    await viewProfilePage.deleteCurriculum(cvName);
 
     //check if the cv is deleted
-    //expect(await viewProfilePage.getCurriculum(cvName)).toBe(null);
+    expect(await viewProfilePage.getCurriculum(cvName)).toBe(null);
 
 });
 

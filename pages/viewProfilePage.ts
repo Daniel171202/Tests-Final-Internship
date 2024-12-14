@@ -27,9 +27,7 @@ export class ViewProfilePage {
   constructor(page: Page) {
     this.page = page;
     this.navbar = new NavbarComponent(page);
-    this.editProfileButton = this.page
-      .locator('a[href="/perfil/estudiante/editar"]')
-      .nth(1);
+    this.editProfileButton = this.page.locator('#editarPerfil');
     this.numeroCelular = this.page.locator("#valueTelefonoEstudiante");
     this.carrera = this.page.locator("#valueCarreraEstudiante");
     this.anioIngreso = this.page.locator("#valueAnioIngresoEstudiante");
@@ -43,21 +41,30 @@ export class ViewProfilePage {
   }
 
   async getNumeroCelular() {
-    const numeroCelular = await this.numeroCelular.innerText();
+    await this.page.waitForLoadState("networkidle");
+
+    const numeroCelular = await this.page.locator("#valueTelefonoEstudiante").innerText();
     return numeroCelular;
   }
 
   async getCarrera() {
+    await this.page.waitForLoadState("networkidle");
+
     const carrera = await this.carrera.innerText();
     return carrera;
   }
 
   async getAnioIngreso() {
+    await this.page.waitForLoadState("networkidle");
+
     const anioIngreso = await this.anioIngreso.innerText();
     return anioIngreso;
   }
 
   async getDescripcion() {
+    await this.page.waitForLoadState("networkidle");
+    //refresh this.description
+    
     const descripcion = await this.descripcion.innerText();
     return descripcion;
   }
@@ -74,21 +81,14 @@ async getCurriculum(cvName: string) {
 }
 
 async viewCurriculum(cvName: string) {
-    // Escucha el evento de nueva página con un timeout explícito
-    const page7Promise = this.page.context().waitForEvent('page');
-
-    await this.page.locator('li').filter({ hasText: cvName }).locator('a').evaluate(a => (a as HTMLAnchorElement).target = '_blank');
-    await this.page.locator('li').filter({ hasText: cvName }).locator('a').click();
-    const page7 = await page7Promise;
-
-    await page7.waitForLoadState('networkidle');
-
-    const cvNameAux = cvName.split(".");
-    cvName = cvNameAux[0];
-
-    const result = page7.url().includes(cvName);
-    await page7.close();
-    return result;
+  try {
+    const curriculum = await this.page
+        .getByText(cvName) 
+        .innerText({ timeout: 3000 });
+    return true;
+} catch (error) {
+    return null;
+}
 }
 
 

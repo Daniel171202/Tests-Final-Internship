@@ -26,10 +26,24 @@ test('Cambiar el número celular de un estudiante', async ({ page }) => {
 
     const viewProfilePage = await principalPageLogged.goToViewProfile();
     const editProfilePage = await viewProfilePage.goToEditProfile();
+    await editProfilePage.page.waitForLoadState("networkidle");
+
     await editProfilePage.fillNumeroCelular(randomNumeroCelular);
+    //wait 5 seconds to see the changes
+
     await editProfilePage.clickGuardar();
+    await editProfilePage.page.waitForTimeout(2000);
+    await editProfilePage.page.waitForLoadState("networkidle");
+
 
     const viewProfilePage2 = await principalPageLogged.goToViewProfile();
+   await viewProfilePage2.page.goto('https://internship.serverbb.online');
+ 
+    await viewProfilePage2.goto();
+
+    await viewProfilePage2.page.waitForLoadState("networkidle");
+
+
     expect(await viewProfilePage2.getNumeroCelular()).toBe(randomNumeroCelular);
 
 });
@@ -46,8 +60,17 @@ test('Cambiar la descripción de un estudiante', async ({ page }) => {
     const editProfilePage = await viewProfilePage.goToEditProfile();
     await editProfilePage.fillDescripcion(randomDescripcion);
     await editProfilePage.clickGuardar();
+    await editProfilePage.page.waitForTimeout(2000);
+
 
     const viewProfilePage2 = await principalPageLogged.goToViewProfile();
+    //wait until the request is done
+    await viewProfilePage2.page.goto('https://internship.serverbb.online');
+    await viewProfilePage2.goto();
+
+    await viewProfilePage2.page.waitForLoadState("networkidle");
+
+
     expect(await viewProfilePage2.getDescripcion()).toBe(randomDescripcion);
 
 });
@@ -62,8 +85,14 @@ test('Cambiar el año de ingreso de un estudiante', async ({ page }) => {
     const editProfilePage = await viewProfilePage.goToEditProfile();
     await editProfilePage.fillAnioIngreso(randomAnioIngreso);
     await editProfilePage.clickGuardar();
+    await editProfilePage.page.waitForTimeout(2000);
+
 
     const viewProfilePage2 = await principalPageLogged.goToViewProfile();
+    await viewProfilePage2.goto();
+
+    await viewProfilePage2.page.waitForLoadState("networkidle");
+
     expect(await viewProfilePage2.getAnioIngreso()).toBe(randomAnioIngreso);
 
 });
