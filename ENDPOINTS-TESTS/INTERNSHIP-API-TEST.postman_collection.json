@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "88961264-951c-4304-8a01-6261f0415db5",
+		"_postman_id": "9bd17e4c-a072-4987-a4d1-b01cdf2537e5",
 		"name": "INTERNSHIP-API-TEST",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "39346479"
+		"_exporter_id": "27481029"
 	},
 	"item": [
 		{
@@ -232,6 +232,8 @@
 							"",
 							"",
 							"",
+							"",
+							"",
 							"pm.test(\"Response schema is valid\", function () {",
 							"  var schema = {",
 							"    type: \"object\",",
@@ -364,7 +366,7 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "postman-cloud:///1efb9933-12ab-4bf0-b644-eca1bc2c35d3"
+							"src": "postman-cloud:///1efb7824-e90d-4200-85c8-fe250d270b8c"
 						}
 					]
 				},
@@ -502,6 +504,13 @@
 							"    const responseData = pm.response.json();\r",
 							"\r",
 							"    pm.expect(responseData.response.idCurriculums).to.be.a('number');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Id matches the ID sent\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.response.idCurriculums).to.equal(pm.environment.get('idCurriculums'))\r",
 							"});"
 						],
 						"type": "text/javascript",
