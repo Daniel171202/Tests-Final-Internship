@@ -26,14 +26,12 @@ test('Cambiar el número celular de un estudiante', async ({ page }) => {
 
     const viewProfilePage = await principalPageLogged.goToViewProfile();
     const editProfilePage = await viewProfilePage.goToEditProfile();
-    await editProfilePage.page.waitForLoadState("networkidle");
 
     await editProfilePage.fillNumeroCelular(randomNumeroCelular);
     //wait 5 seconds to see the changes
 
     await editProfilePage.clickGuardar();
     await editProfilePage.page.waitForTimeout(2000);
-    await editProfilePage.page.waitForLoadState("networkidle");
 
 
     const viewProfilePage2 = await principalPageLogged.goToViewProfile();
