@@ -5,13 +5,6 @@ const username = "estudiante.test@ucb.edu.bo";
 const password = "Estudiante123";
 
 
-const randomNumeroCelular = Math.floor(Math.random() * 10000000).toString();
-
-
-const randomDescripcion = `Esta es una descripción aleatoria número ${Math.floor(Math.random() * 1000)}`;
-
-
-const randomAnioIngreso = (Math.floor(Math.random() * (2023 - 2000)) + 2000).toString();
 
 test.beforeEach(async ({ page }) => {
     await page.goto('https://internship.serverbb.online/');
@@ -26,7 +19,8 @@ async function login(page: any){
 
 
 test('Cambiar el número celular de un estudiante', async ({ page }) => {
-  
+    const randomNumeroCelular = Math.floor(Math.random() * 10000000).toString();
+
     const principalPageLogged = await login(page);
 
 
@@ -43,6 +37,9 @@ test('Cambiar el número celular de un estudiante', async ({ page }) => {
 
 
 test('Cambiar la descripción de un estudiante', async ({ page }) => {
+    const randomDescripcion = `Esta es una descripción aleatoria número ${Math.floor(Math.random() * 1000)}`;
+
+
     const principalPageLogged = await login(page);
 
     const viewProfilePage = await principalPageLogged.goToViewProfile();
@@ -57,6 +54,8 @@ test('Cambiar la descripción de un estudiante', async ({ page }) => {
 
 
 test('Cambiar el año de ingreso de un estudiante', async ({ page }) => {
+    const randomAnioIngreso = (Math.floor(Math.random() * (2023 - 2000)) + 2000).toString();
+
     const principalPageLogged = await login(page);
 
     const viewProfilePage = await principalPageLogged.goToViewProfile();

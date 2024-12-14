@@ -37,6 +37,10 @@ export class LoginPage{
         await this.usernameInput.fill(username);
         await this.passwordInput.fill(password);
         await this.iniciarSesionButton.click();
+        await this.page.waitForLoadState('networkidle');
+
+
+
         if (await this.inputError.isVisible()){
             throw new Error('Error en el login');
         }

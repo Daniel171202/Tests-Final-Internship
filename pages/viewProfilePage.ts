@@ -74,22 +74,23 @@ async getCurriculum(cvName: string) {
 }
 
 async viewCurriculum(cvName: string) {
-    const page7Promise = this.page.waitForEvent('popup');
+    // Escucha el evento de nueva página con un timeout explícito
+    const page7Promise = this.page.context().waitForEvent('page');
+
+    await this.page.locator('li').filter({ hasText: cvName }).locator('a').evaluate(a => (a as HTMLAnchorElement).target = '_blank');
     await this.page.locator('li').filter({ hasText: cvName }).locator('a').click();
     const page7 = await page7Promise;
-    //quitar la extension del nombre del cv
-    var cvNameAux = cvName.split(".");
-    cvName = cvNameAux[0];
-    if(page7.url().includes(cvName)){
-        page7.close();
-        return true;
-    }else{
-        page7.close();
-        return false;
-    }
-    
 
+    await page7.waitForLoadState('networkidle');
+
+    const cvNameAux = cvName.split(".");
+    cvName = cvNameAux[0];
+
+    const result = page7.url().includes(cvName);
+    await page7.close();
+    return result;
 }
+
 
 
   async clickAgregarCurriculums() {
@@ -109,6 +110,10 @@ async viewCurriculum(cvName: string) {
       .setInputFiles(newFilePath);
 
     await this.page.getByRole("button", { name: "Guardar" }).click();
+        await this.page.waitForResponse(response =>
+            response.url().includes('/curriculum') && response.status() === 200
+        );
+
     //then delete the new file
     await fs.promises.unlink(newFilePath);
     return newFileName;

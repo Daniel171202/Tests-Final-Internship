@@ -20,9 +20,6 @@ test('Iniciar Sesión con usuario inexistente', async ({ page }) => {
     const principalPage = new PrincipalPage(page);
     await principalPage.goto();
     const loginPage = await principalPage.goToLogin();
-    await expect(async () => {
-        await loginPage.doLogin("as", "as");
-    }
-    ).rejects.toThrowError('Error en el login');
-}
-);
+
+    await expect(loginPage.doLogin("as", "as")).rejects.toThrowError('Error en el login');
+});
