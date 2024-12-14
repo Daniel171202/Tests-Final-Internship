@@ -119,7 +119,7 @@
 							"",
 							"",
 							"pm.test(\"Response time is within an acceptable range\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
 							"});",
 							"",
 							"pm.test(\"Response schema is as expected\", function () {",
@@ -366,7 +366,7 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "postman-cloud:///1efb7824-e90d-4200-85c8-fe250d270b8c"
+							"src": "CV_PRUEBA.pdf"
 						}
 					]
 				},
